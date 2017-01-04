@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Ajaxer</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+</head>
+
+<body>
+<div class="container">
+	<form>
+		<div class="form-group">
+			<label for="requestUrl">Request url</label>
+			<input type="text" name="requestUrl" id="requestUrl" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="requestParams">Request body</label>
+			<textarea name="requestParams" id="requestParams" class="form-control" rows="20"></textarea>
+		</div>
+		<button id="sendRequest" type="button" class="btn btn-default">Send request</button>
+	</form>
+
+	Response:
+	<pre><code id="response" class="language-js"></code></pre>
+</div>
+
+<script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+<script>
+
+
+$(document).ready(function() {
+	$('#sendRequest').click(function() {
+		var sessionid = null,
+			method = 'tr.get',
+			id = 0;
+
+		sessionid = '781f5da62ec646a986406c306f5e79a8';
+
+		var request = $('#requestParams').val();
+		console.log('request:');
+		console.log(request);
+
+		$.ajax({
+			url: $('#requestUrl').val(),
+			headers: {
+				"Content-type": "application/json-rpc"
+			},
+			type: "POST",
+			data: request,
+			dataType: "text",
+			success: function(result) {
+				try {
+					result = JSON.parse(result);
+
+					$('#response').text('');
+					for (var i = 0; i < result.length; i++) {console.log(result[i]);
+						$('#response').append(JSON.stringify(result[i], null, 4));
+					}
+				}
+				catch (e) {
+					$('#response').html(result);
+					alert('Api response not in JSON format.');
+				}
+			},
+			error: function(xhr) {
+				alert(xhr.statusText);
+			}
+		});
+	});
+});
+
+</script>
+
+</body>
+</html>

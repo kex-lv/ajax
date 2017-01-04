@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Ajaxer</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+</head>
+
+<body>
+<div class="container">
+	<form>
+		<div class="form-group">
+			<label for="requestUrl">Request url</label>
+			<input type="text" name="requestUrl" id="requestUrl" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="requestParams">Request body</label>
+			<textarea name="requestParams" id="requestParams" class="form-control" rows="20"></textarea>
+		</div>
+		<button id="sendRequest" type="button" class="btn btn-default">Send request</button>
+	</form>
+
+	Response:
+	<pre><code id="response" class="language-js"></code></pre>
+</div>
+
+<script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+<script>
+
+
+$(document).ready(function() {
+	$('#sendRequest').click(function() {
+
+		sessionid = '781f5da62ec646a986406c306f5e79a8';
+		var request = $('#requestParams').val();
+		console.log('request:');
+		console.log(request);
+
+		$.ajax({
+			url: $('#requestUrl').val(),
+			headers: {
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8",
+				"Accept-Language": "en-US,en;q=0.5",
+				"Accept-Encoding": "gzip, deflate",
+				"Referer": "http://localhost/php/index.php",
+				"Cookie": "PHPSESSID=mlvqil12qmv1bns2v9vl15u2bv; my_sessionid=3a27be68cdfc26818f594523cf251c05; tab=2",
+				"DNT": "1",
+				"Connection": "close",
+				"Upgrade-Insecure-Requests": "1",
+				"Content-type": "application/x-www-form-urlencoded",
+				"Content-Length": "184"
+			},
+			type: "POST",
+			data: request,
+			dataType: "text",
+			success: function(result) {
+				try {
+					$('#response').val(result);
+					console.log(result);
+				}
+				catch (e) {
+					$('#response').html(result);
+					alert('Request error.');
+					console.log(e);
+				}
+			},
+			error: function(xhr) {
+				alert(xhr.statusText);
+			}
+		});
+	});
+});
+
+</script>
+
+</body>
+</html>
